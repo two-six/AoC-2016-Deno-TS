@@ -33,7 +33,8 @@ const step = (instruction: string, pos: Position, visited: Set<string>):
 
     const move = (value: string) => {
         let vis = false;
-        for(let i=1; i <= parseInt(value); i++) {
+        const parsedVal = parseInt(value);
+        for(let i=1; i <= parsedVal; i++) {
             const nx = pos.x + (pos.face%2==0 ? 0 : pos.face==1 ? i : -i);
             const ny = pos.y + (pos.face%2==1 ? 0 : pos.face==2 ? i : -i);
             if(visited.has([nx, ny].toString()) && !vis) {
@@ -42,20 +43,8 @@ const step = (instruction: string, pos: Position, visited: Set<string>):
             }
             visited.add([nx, ny].toString());
         }
-        switch(pos.face) {
-            case Direction.NORTH:
-                pos.y -= parseInt(value);
-                break;
-            case Direction.EAST:
-                pos.x += parseInt(value);
-                break;
-            case Direction.SOUTH:
-                pos.y += parseInt(value);
-                break;
-            case Direction.WEST:
-                pos.x -= parseInt(value);
-                break;
-        }
+        pos.x += pos.face%2==0 ? 0 : pos.face==1 ? parsedVal : -parsedVal;
+        pos.y += pos.face%2==1 ? 0 : pos.face==2 ? parsedVal : -parsedVal;
     };
 
     moveFace(instruction.substring(0, 1));
